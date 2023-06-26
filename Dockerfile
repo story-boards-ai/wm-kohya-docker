@@ -1,6 +1,6 @@
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as runtime
 
-ARG KOHYA_VERSION=v21.7.14
+ARG KOHYA_VERSION=v21.7.15
 ARG KOHYA_VENV=/workspace/kohya_ss/venv
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -58,7 +58,7 @@ RUN git checkout ${KOHYA_VERSION} && \
     python3 -m venv ${KOHYA_VENV} && \
     source ${KOHYA_VENV}/bin/activate && \
     pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.20 bitsandbytes==0.39.1 accelerate==0.19.0 tensorboard==2.12.1 tensorflow==2.12.0 && \
+    pip3 install --no-cache-dir xformers==0.0.20 bitsandbytes==0.35.0 accelerate==0.19.0 tensorboard==2.12.1 tensorflow==2.12.0 && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
     pip3 cache purge && \
@@ -88,6 +88,9 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
 # so it doesn't conflict with Network Volumes
 WORKDIR /workspace
 RUN mv /workspace/kohya_ss /kohya_ss
+
+# Copy requirements for Runpod to resolve issue with bitsandbytes 0.39.1
+COPY requirements_runpod.txt /kohya_ss/
 
 # Set up the container startup script
 COPY start.sh /start.sh
