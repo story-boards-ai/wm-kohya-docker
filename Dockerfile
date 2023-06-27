@@ -1,7 +1,7 @@
 # Stage 1: Base
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
-ARG KOHYA_VERSION=v21.7.15
+ARG KOHYA_VERSION=v21.7.16
 ARG KOHYA_VENV=/kohya_ss/venv
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -89,9 +89,6 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
     mv runpodctl /usr/local/bin
 
 WORKDIR /workspace
-
-# Copy requirements for Runpod to resolve issue with bitsandbytes 0.39.1
-COPY requirements_runpod.txt /kohya_ss/
 
 # Set up the container startup script
 COPY start.sh /start.sh
