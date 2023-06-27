@@ -33,6 +33,7 @@ RUN apt update && \
         psmisc \
         rsync \
         vim \
+        zip \
         unzip \
         p7zip-full \
         htop \
