@@ -2,7 +2,6 @@
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
 ARG KOHYA_VERSION=v21.7.16
-ARG KOHYA_VENV=/kohya_ss/venv
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -61,8 +60,8 @@ WORKDIR /
 RUN git clone https://github.com/bmaltais/kohya_ss.git
 WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
-    python3 -m venv --system-site-packages ${KOHYA_VENV} && \
-    source ${KOHYA_VENV}/bin/activate && \
+    python3 -m venv --system-site-packages venv && \
+    source venv/bin/activate && \
     pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip3 install --no-cache-dir xformers==0.0.20 bitsandbytes==0.35.0 accelerate==0.19.0 tensorboard==2.12.1 tensorflow==2.12.0 && \
     pip3 install -r requirements.txt && \
@@ -73,7 +72,7 @@ RUN git checkout ${KOHYA_VERSION} && \
     deactivate
 
 # Install Jupyter
-RUN source ${KOHYA_VENV}/bin/activate && \
+RUN source venv/bin/activate && \
     pip3 install jupyterlab \
         ipywidgets \
         jupyter-archive \

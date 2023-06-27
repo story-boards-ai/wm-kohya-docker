@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 export PYTHONUNBUFFERED=1
-export KOHYA_VENV=/workspace/kohya_ss/venv
 
 echo "Container is running"
 
@@ -30,8 +29,8 @@ then
     ln -sf /examples /workspace
     ln -sf /root/welcome.ipynb /workspace
 
-    cd /
-    source ${KOHYA_VENV}/bin/activate
+    cd /workspace/kohya_ss
+    source venv/bin/activate
     nohup jupyter lab --allow-root \
         --no-browser \
         --port=8888 \
@@ -56,7 +55,7 @@ else
     echo "Starting Kohya_ss Web UI"
     mkdir -p /workspace/logs
     cd /workspace/kohya_ss
-    source /workspace/kohya_ss/venv/bin/activate
+    source venv/bin/activate
     nohup ./gui.sh --listen 0.0.0.0 --server_port 3000 --headless > /workspace/logs/kohya_ss.log 2>&1 &
     echo "Kohya_ss started"
     echo "Log file: /workspace/logs/kohya_ss.log"
