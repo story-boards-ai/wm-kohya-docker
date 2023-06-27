@@ -87,12 +87,15 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
     chmod a+x runpodctl && \
     mv runpodctl /usr/local/bin
 
-WORKDIR /workspace
-
 # Set up the container startup script
 COPY start.sh /start.sh
-RUN chmod a+x /start.sh
+RUN chmod +x /start.sh
 COPY accelerate.yaml /accelerate.yaml
+COPY fix_venv.sh /fix_venv.sh
+RUN chmod +x /fix_venv.sh
+
+# Fix the venv to make it work from /workspace
+RUN /fix_venv.sh /kohya_ss/venv /workspace/kohya_ss/venv
 
 # Start the container
 SHELL ["/bin/bash", "--login", "-c"]
