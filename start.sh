@@ -8,6 +8,10 @@ echo "Syncing Kohya_ss to workspace, please wait..."
 rsync -au /kohya_ss/ /workspace/kohya_ss/
 rm -rf /kohya_ss
 
+# Fix the venv to make it work from /workspace
+echo "Fixing venv..."
+/fix_venv.sh /kohya_ss/venv /workspace/kohya_ss/venv
+
 # Configure accelerate
 echo "Configuring accelerate..."
 mkdir -p /root/.cache/huggingface/accelerate

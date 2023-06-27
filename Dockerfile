@@ -94,9 +94,6 @@ COPY accelerate.yaml /accelerate.yaml
 COPY fix_venv.sh /fix_venv.sh
 RUN chmod +x /fix_venv.sh
 
-# Fix the venv to make it work from /workspace
-RUN /fix_venv.sh /kohya_ss/venv /workspace/kohya_ss/venv
-
 # Start the container
 SHELL ["/bin/bash", "--login", "-c"]
 CMD [ "/start.sh" ]
