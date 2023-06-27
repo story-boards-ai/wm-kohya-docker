@@ -33,8 +33,8 @@ then
     ln -sf /examples /workspace
     ln -sf /root/welcome.ipynb /workspace
 
-    cd /workspace/kohya_ss
-    source venv/bin/activate
+    cd /
+    source /workspace/kohya_ss/venv/bin/activate
     nohup jupyter lab --allow-root \
         --no-browser \
         --port=8888 \
