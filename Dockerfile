@@ -1,14 +1,15 @@
-FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as runtime
+# Stage 1: Base
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
 ARG KOHYA_VERSION=v21.7.15
-ARG KOHYA_VENV=/workspace/kohya_ss/venv
+ARG KOHYA_VENV=/kohya_ss/venv
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV DEBIAN_FRONTEND noninteractive\
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=Africa/Johannesburg \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=on \
     SHELL=/bin/bash
-
-# Create workspace working directory
-WORKDIR /workspace
 
 # Install Ubuntu packages
 RUN apt update && \
@@ -50,33 +51,36 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python && \
     curl https://bootstrap.pypa.io/get-pip.py | python && \
     rm -f get-pip.py
 
+# Stage 2: Install kohya_ss and python modules
+FROM base as kohya_ss_setup
+
+# Create workspace working directory
+WORKDIR /
+
 # Install Kohya_ss
-ENV TZ=Africa/Johannesburg
 RUN git clone https://github.com/bmaltais/kohya_ss.git /workspace/kohya_ss
-WORKDIR /workspace/kohya_ss
+WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
-    python3 -m venv ${KOHYA_VENV} && \
+    python3 -m venv --system-site-packages ${KOHYA_VENV} && \
     source ${KOHYA_VENV}/bin/activate && \
     pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip3 install --no-cache-dir xformers==0.0.20 bitsandbytes==0.35.0 accelerate==0.19.0 tensorboard==2.12.1 tensorflow==2.12.0 && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
-    pip3 cache purge && \
-    deactivate
-
-# Complete Jupyter installation
-RUN source ${KOHYA_VENV}/bin/activate && \
-    pip3 install jupyterlab ipywidgets jupyter-archive jupyter_contrib_nbextensions && \
-    jupyter contrib nbextension install --user && \
-    jupyter nbextension enable --py widgetsnbextension && \
-    pip3 install gdown && \
-    deactivate
-
-# Fix Tensorboard
-RUN source ${KOHYA_VENV}/bin/activate && \
+    # Fix Tensorboard
     pip3 uninstall -y tensorboard tb-nightly && \
     pip3 install tensorboard tensorflow && \
-    pip3 cache purge && \
+    deactivate
+
+# Install Jupyter
+RUN source ${KOHYA_VENV}/bin/activate && \
+    pip3 install jupyterlab \
+        ipywidgets \
+        jupyter-archive \
+        jupyter_contrib_nbextensions \
+        gdown && \
+    jupyter contrib nbextension install --user && \
+    jupyter nbextension enable --py widgetsnbextension && \
     deactivate
 
 # Install runpodctl
@@ -84,10 +88,7 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
     chmod a+x runpodctl && \
     mv runpodctl /usr/local/bin
 
-# Move Kohya_ss and venv to the root
-# so it doesn't conflict with Network Volumes
 WORKDIR /workspace
-RUN mv /workspace/kohya_ss /kohya_ss
 
 # Copy requirements for Runpod to resolve issue with bitsandbytes 0.39.1
 COPY requirements_runpod.txt /kohya_ss/
