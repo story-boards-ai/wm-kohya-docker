@@ -58,7 +58,7 @@ FROM base as kohya_ss_setup
 WORKDIR /
 
 # Install Kohya_ss
-RUN git clone https://github.com/bmaltais/kohya_ss.git /workspace/kohya_ss
+RUN git clone https://github.com/bmaltais/kohya_ss.git
 WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
     python3 -m venv --system-site-packages ${KOHYA_VENV} && \
