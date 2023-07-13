@@ -1,7 +1,7 @@
 # Stage 1: Base
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
-ARG KOHYA_VERSION=v21.7.16
+ARG KOHYA_VERSION=v21.8.2
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -20,6 +20,7 @@ RUN apt update && \
         bash \
         git \
         ncdu \
+        nginx \
         net-tools \
         openssh-server \
         libglib2.0-0 \
@@ -61,15 +62,18 @@ WORKDIR /
 RUN git clone https://github.com/bmaltais/kohya_ss.git
 WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
-    python3 -m venv --system-site-packages venv && \
+    python3 -m venv --system-site-packag venv && \
     source venv/bin/activate && \
     pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.20 bitsandbytes==0.35.0 accelerate==0.15.0 tensorboard==2.12.1 tensorflow==2.12.0 && \
+    pip3 install --no-cache-dir xformers==0.0.20 \
+        bitsandbytes==0.35.0 \
+        accelerate==0.19.0 \
+        tensorboard==2.12.1 \
+        tensorflow==2.12.0 \
+        tensorrt && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
-    # Fix Tensorboard
-    pip3 uninstall -y tensorboard tb-nightly && \
-    pip3 install tensorboard tensorflow && \
+    pip3 cache purge && \
     deactivate
 
 # Install Jupyter
@@ -88,12 +92,19 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
     chmod a+x runpodctl && \
     mv runpodctl /usr/local/bin
 
+# NGINX Proxy
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY 502.html /usr/share/nginx/html/502.html
+
+# Copy the README.md
+COPY README.md /usr/share/nginx/html/README.md
+
 # Set up the container startup script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-COPY accelerate.yaml /accelerate.yaml
-COPY fix_venv.sh /fix_venv.sh
-RUN chmod +x /fix_venv.sh
+WORKDIR /
+COPY pre_start.sh start.sh fix_venv.sh accelerate.yaml ./
+RUN chmod +x /start.sh && \
+    chmod +x /pre_start.sh && \
+    chmod +x /fix_venv.sh
 
 # Start the container
 SHELL ["/bin/bash", "--login", "-c"]
