@@ -73,7 +73,6 @@ RUN git checkout ${KOHYA_VERSION} && \
         tensorrt && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
-    pip3 cache purge && \
     deactivate
 
 # Install Jupyter
