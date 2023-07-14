@@ -7,7 +7,7 @@
 * Python 3.10.6
 * Torch 2.0.1
 * xformers 0.0.20
-* [Kohya_ss](https://github.com/bmaltais/kohya_ss) v21.7.16
+* [Kohya_ss](https://github.com/bmaltais/kohya_ss) v21.8.2
 
 ## Available on RunPod
 
