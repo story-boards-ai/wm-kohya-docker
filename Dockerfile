@@ -95,8 +95,8 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY 502.html /usr/share/nginx/html/502.html
 
-# Copy the README.md
-COPY README.md /usr/share/nginx/html/README.md
+# Copy the template-readme.md
+COPY template-readme.md /usr/share/nginx/html/README.md
 
 # Set up the container startup script
 WORKDIR /
