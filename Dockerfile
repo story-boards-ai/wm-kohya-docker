@@ -64,8 +64,8 @@ WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
     python3 -m venv --system-site-packag venv && \
     source venv/bin/activate && \
-    pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.20 \
+    pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    pip3 install xformers==0.0.20 \
         bitsandbytes==0.35.0 \
         accelerate==0.19.0 \
         tensorboard==2.12.1 \
@@ -76,15 +76,11 @@ RUN git checkout ${KOHYA_VERSION} && \
     deactivate
 
 # Install Jupyter
-RUN source venv/bin/activate && \
-    pip3 install jupyterlab \
+RUN pip3 install -U --no-cache-dir jupyterlab \
+        jupyterlab_widgets \
+        ipykernel \
         ipywidgets \
-        jupyter-archive \
-        jupyter_contrib_nbextensions \
-        gdown && \
-    jupyter contrib nbextension install --user && \
-    jupyter nbextension enable --py widgetsnbextension && \
-    deactivate
+        gdown
 
 # Install runpodctl
 RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl-linux-amd -O runpodctl && \
