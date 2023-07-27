@@ -1,7 +1,7 @@
 # Stage 1: Base
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
-ARG KOHYA_VERSION=v21.8.2
+ARG KOHYA_VERSION=v21.8.5
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -16,6 +16,7 @@ RUN apt update && \
     apt install -y --no-install-recommends \
         software-properties-common \
         python3.10-venv \
+        python3-pip \
         python3-tk \
         bash \
         git \
@@ -47,10 +48,8 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 
-# Set Python and pip
-RUN ln -s /usr/bin/python3.10 /usr/bin/python && \
-    curl https://bootstrap.pypa.io/get-pip.py | python && \
-    rm -f get-pip.py
+# Set Python
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # Stage 2: Install kohya_ss and python modules
 FROM base as kohya_ss_setup
@@ -67,9 +66,9 @@ RUN git checkout ${KOHYA_VERSION} && \
     pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip3 install xformers==0.0.20 \
         bitsandbytes==0.35.0 \
-        accelerate==0.19.0 \
-        tensorboard==2.12.1 \
+        tensorboard==2.12.3 \
         tensorflow==2.12.0 \
+        wheel \
         tensorrt && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
