@@ -1,13 +1,13 @@
 ## Kohya SS
 
-### Version 1.0.7
+### Version 1.0.8
 
 ### Included in this Template
 
 * Ubuntu 22.04 LTS
 * CUDA 11.8
 * Python 3.10.6
-* [Kohya_ss](https://github.com/bmaltais/kohya_ss) v21.8.5
+* [Kohya_ss](https://github.com/bmaltais/kohya_ss) v21.8.6
 * Torch 2.0.1
 * xformers 0.0.20
 
