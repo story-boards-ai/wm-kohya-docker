@@ -1,7 +1,7 @@
 # Stage 1: Base
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 as base
 
-ARG KOHYA_VERSION=V21.8.5
+ARG KOHYA_VERSION=v21.8.7
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -65,7 +65,7 @@ RUN git checkout ${KOHYA_VERSION} && \
     source venv/bin/activate && \
     pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip3 install xformers==0.0.20 \
-        bitsandbytes==0.35.0 \
+        bitsandbytes==0.41.1 \
         tensorboard==2.12.3 \
         tensorflow==2.12.0 \
         wheel \
@@ -87,11 +87,9 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
     mv runpodctl /usr/local/bin
 
 # NGINX Proxy
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY 502.html /usr/share/nginx/html/502.html
-
-# Copy the template-readme.md
-COPY template-readme.md /usr/share/nginx/html/README.md
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/502.html /usr/share/nginx/html/502.html
+COPY nginx/template-readme.md /usr/share/nginx/html/README.md
 
 # Set up the container startup script
 WORKDIR /
