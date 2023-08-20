@@ -19,6 +19,7 @@ RUN apt update && \
         python3-pip \
         python3-tk \
         bash \
+        dos2unix \
         git \
         ncdu \
         nginx \
@@ -61,7 +62,7 @@ WORKDIR /
 RUN git clone https://github.com/bmaltais/kohya_ss.git
 WORKDIR /kohya_ss
 RUN git checkout ${KOHYA_VERSION} && \
-    python3 -m venv --system-site-packag venv && \
+    python3 -m venv --system-site-packages venv && \
     source venv/bin/activate && \
     pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip3 install xformers==0.0.20 \
