@@ -35,6 +35,8 @@ docker run -d \
   ashleykza/kohya:1.2.0
 ```
 
+You can obviously substitute the image name and tag with your own.
+
 ## Acknowledgements
 
 1. [RunPod](https://runpod.io?ref=2xxro4sy) for providing most
