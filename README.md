@@ -16,6 +16,25 @@ You can use my custom [RunPod template](
 https://runpod.io/gsc?template=51q837fywe&ref=2xxro4sy)
 to launch it on RunPod.
 
+## Running Locally
+
+### Install Nvidia CUDA Driver
+
+- [Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- [Windows](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html)
+
+### Start the Docker container
+
+```bash
+docker run -d \
+  --gpus all \
+  -v /workspace \
+  -p 3000:3001 \
+  -p 8888:8888 \
+  -e JUPYTER_PASSWORD=Jup1t3R! \
+  ashleykza/kohya:1.2.0
+```
+
 ## Acknowledgements
 
 1. [RunPod](https://runpod.io?ref=2xxro4sy) for providing most
