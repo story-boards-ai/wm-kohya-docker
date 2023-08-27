@@ -53,7 +53,7 @@ RUN apt update && \
 RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # Stage 2: Install kohya_ss and python modules
-FROM base as kohya_ss_setup
+FROM base as kohya_ss_setup 
 
 # Create workspace working directory
 WORKDIR /
@@ -74,6 +74,9 @@ RUN git checkout ${KOHYA_VERSION} && \
     pip3 install -r requirements.txt && \
     pip3 install . && \
     deactivate
+
+#get SDXL model
+RUN wget /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors    
 
 # Install Jupyter
 RUN pip3 install -U --no-cache-dir jupyterlab \
