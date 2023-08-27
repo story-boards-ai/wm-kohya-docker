@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     SHELL=/bin/bash
 
 USER root
+RUN apt-get clean
 
 # Install Ubuntu packages
 RUN apt update && \
