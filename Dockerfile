@@ -80,7 +80,7 @@ RUN git checkout ${KOHYA_VERSION} && \
     deactivate
 
 #get SDXL model
-RUN wget /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors    
+RUN wget -O /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
 
 # Copy local training data to the container
 COPY training_data/ /kohya_ss/characters/
