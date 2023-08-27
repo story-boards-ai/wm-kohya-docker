@@ -78,6 +78,12 @@ RUN git checkout ${KOHYA_VERSION} && \
 #get SDXL model
 RUN wget /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors    
 
+# Copy local training data to the container
+COPY /mnt/f/training_data/characters/training_data/ /kohya_ss/characters/
+
+# Copy cutom scripts
+COPY assets_prep.py /kohya_ss/
+
 # Install Jupyter
 RUN pip3 install -U --no-cache-dir jupyterlab \
         jupyterlab_widgets \
