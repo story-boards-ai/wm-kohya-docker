@@ -10,6 +10,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PIP_NO_CACHE_DIR=on \
     SHELL=/bin/bash
 
+USER root
+
 # Install Ubuntu packages
 RUN apt update && \
     apt -y upgrade && \
