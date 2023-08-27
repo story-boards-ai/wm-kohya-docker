@@ -22,6 +22,7 @@ RUN apt update && \
         python3-pip \
         python3-tk \
         bash \
+        apt-utils \
         dos2unix \
         git \
         ncdu \
