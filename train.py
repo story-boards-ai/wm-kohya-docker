@@ -79,7 +79,7 @@ def start_training_sessions():
            # Print the command for visibility
         print("Executing command:", " ".join(cmd))
         
-        if is_test == 'yes':
+        if is_test == 'y':
             break
         else:
             # Execute the command
