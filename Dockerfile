@@ -88,6 +88,7 @@ COPY training_data/ /kohya_ss/characters/
 
 # Copy cutom scripts
 COPY assets_prep.py /kohya_ss/
+COPY assets_prep.py /
 
 # Install Jupyter
 RUN pip3 install -U --no-cache-dir jupyterlab \

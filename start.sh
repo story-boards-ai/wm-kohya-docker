@@ -77,6 +77,6 @@ echo "Container is READY!"
 
 # Execute assets_prep.py script
 echo "Executing assets_prep.py..."
-python3 assets_prep.py  
+python3 /assets_prep.py  
 
 sleep infinity
