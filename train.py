@@ -21,7 +21,7 @@ def start_training_sessions():
         'accelerate', 'launch', 
         '--num_cpu_threads_per_process=2', 
         './sdxl_train_textual_inversion.py',
-        '--pretrained_model_name_or_path=/workspace/kohya_ss/models/sd_xl_base_1.0.safetensors',
+        '--pretrained_model_name_or_path=/workspace/kohya_ss/model/sd_xl_base_1.0.safetensors',
         '--resolution=768,768',
         '--save_model_as=safetensors',
         '--lr_scheduler_num_cycles=1',
