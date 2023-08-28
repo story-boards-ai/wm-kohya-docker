@@ -86,10 +86,6 @@ RUN wget -O /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/st
 # Copy local training data to the container
 COPY training_data/ /kohya_ss/characters/
 
-# Copy cutom scripts
-COPY assets_prep.py /kohya_ss/
-COPY assets_prep.py /
-
 # Install Jupyter
 RUN pip3 install -U --no-cache-dir jupyterlab \
         jupyterlab_widgets \
@@ -106,6 +102,10 @@ RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/502.html /usr/share/nginx/html/502.html
 COPY nginx/template-readme.md /usr/share/nginx/html/README.md
+
+# Copy cutom scripts
+COPY assets_prep.py /kohya_ss/
+COPY assets_prep.py /
 
 # Set up the container startup script
 WORKDIR /
