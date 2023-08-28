@@ -1,8 +1,20 @@
 import os
 import subprocess
 
+def is_valid_folder(name):
+    return name[0].isdigit()
+
+def extract_numeric_prefix_with_suffix(s):
+    num_part = int(''.join(filter(str.isdigit, s)))
+    suffix_part = 1 if 'a' in s.split('_')[0] else 0
+    return (num_part, suffix_part)
+
 def start_training_sessions():
-    base_dir = '/workspace/characters_prep'
+    is_test = input("Is this a test? (y/n): ").lower().strip()
+    if is_test == 'y':
+        base_dir = input("Please enter the path for base_dir: ").strip()
+    else:
+        base_dir = '/workspace/characters_prep'
     
     # Base command
     cmd_base = [
@@ -35,7 +47,9 @@ def start_training_sessions():
     ]
 
     try:
-        character_folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+        all_folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+        character_folders = [f for f in all_folders if is_valid_folder(f)]
+        character_folders.sort(key=extract_numeric_prefix_with_suffix)
     except FileNotFoundError:
         print(f"Error: Base directory '{base_dir}' not found.")
         return
@@ -62,14 +76,20 @@ def start_training_sessions():
             f'--init_word={init_word}'
         ]
 
-        # Execute the command
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = process.communicate()
-
-        if process.returncode != 0:
-            print(f"Error occurred while processing '{char_folder}': {err.decode('utf-8')}")
+           # Print the command for visibility
+        print("Executing command:", " ".join(cmd))
+        
+        if is_test == 'yes':
+            break
         else:
-            print(f"Processed '{char_folder}' successfully.")
+            # Execute the command
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = process.communicate()
+
+            if process.returncode != 0:
+                print(f"Error occurred while processing '{char_folder}': {err.decode('utf-8')}")
+            else:
+                print(f"Processed '{char_folder}' successfully.")
 
 if __name__ == '__main__':
     start_training_sessions()
