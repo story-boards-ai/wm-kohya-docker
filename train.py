@@ -15,6 +15,12 @@ def start_training_sessions():
         base_dir = input("Please enter the path for base_dir: ").strip()
     else:
         base_dir = '/workspace/characters_prep'
+
+     # Ask if the user wants to train a series or a single character
+    train_type = input("Do you want to train a series or a single character? (series/single): ").lower().strip()
+
+    # Ask for the starting character number
+    start_char_num = int(input("Enter the starting character number: "))    
     
     # Base command
     cmd_base = [
@@ -53,6 +59,12 @@ def start_training_sessions():
     except FileNotFoundError:
         print(f"Error: Base directory '{base_dir}' not found.")
         return
+
+    # Filter out the characters that need to be trained based on user input
+    if train_type == "single":
+        character_folders = [f for f in character_folders if extract_numeric_prefix_with_suffix(f)[0] == start_char_num]
+    else:  # series
+        character_folders = [f for f in character_folders if extract_numeric_prefix_with_suffix(f)[0] >= start_char_num]
 
     for char_folder in character_folders:
         char_path = os.path.join(base_dir, char_folder, 'img')
