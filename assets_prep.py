@@ -3,8 +3,8 @@ import shutil
 
 def create_workspace_img_folders_and_copy_files():
     # Base directories
-    src_dir = 'workspace/kohya_ss/characters'
-    dest_dir = '/workspace/characters'
+    src_dir = 'workspace/characters_raw'
+    dest_dir = '/workspace/characters_prep'
 
     try:
         # List character folders in /characters
