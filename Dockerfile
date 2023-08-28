@@ -84,7 +84,7 @@ RUN mkdir -p /kohya_ss/model/
 RUN wget -O /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
 
 # Copy local training data to the container
-COPY training_data/ /kohya_ss/characters/
+COPY training_data/ /characters_raw
 
 # Install Jupyter
 RUN pip3 install -U --no-cache-dir jupyterlab \
@@ -104,7 +104,7 @@ COPY nginx/502.html /usr/share/nginx/html/502.html
 COPY nginx/template-readme.md /usr/share/nginx/html/README.md
 
 # Copy cutom scripts
-COPY assets_prep.py /kohya_ss/
+COPY train.py /
 COPY assets_prep.py /
 
 # Set up the container startup script

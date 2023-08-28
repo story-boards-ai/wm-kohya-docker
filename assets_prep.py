@@ -1,6 +1,30 @@
 import os
 import shutil
 
+def check_folder_validity(folder_path):
+    """
+    Check the validity of a character folder:
+    - Must contain an img subfolder.
+    - The img folder must contain files.
+    - The parent folder of img should not contain files.
+    """
+    img_folder_path = os.path.join(folder_path, 'img')
+    
+    # Check if the img folder exists
+    if not os.path.exists(img_folder_path):
+        return False, f"The folder '{folder_path}' doesn't contain an 'img' subfolder."
+    
+    # Check if the img folder has files
+    if not any(os.scandir(img_folder_path)):
+        return False, f"The 'img' folder in '{folder_path}' doesn't contain any files."
+    
+    # Check if the parent folder of img contains files (excluding the 'img' folder itself)
+    parent_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and f != 'img']
+    if parent_files:
+        return False, f"The parent folder of 'img' in '{folder_path}' contains files: {', '.join(parent_files)}."
+
+    return True, ""
+
 def create_workspace_img_folders_and_copy_files():
     # Base directories
     src_dir = '/workspace/characters_raw'
@@ -17,6 +41,20 @@ def create_workspace_img_folders_and_copy_files():
         return
 
     print(f"Found {len(character_folders)} character folders in '{src_dir}'.")
+
+    # Check the validity of each folder
+    invalid_folders = []
+    for char_folder in character_folders:
+        is_valid, error_message = check_folder_validity(os.path.join(src_dir, char_folder))
+        if not is_valid:
+            invalid_folders.append((char_folder, error_message))
+    
+    # If there are any invalid folders, report and exit
+    if invalid_folders:
+        print("Found the following issues with character folders:")
+        for folder_name, error_message in invalid_folders:
+            print(f"- {folder_name}: {error_message}")
+        return
 
     for char_folder in character_folders:
         # Path to the img folder in the source directory
