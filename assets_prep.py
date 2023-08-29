@@ -2,10 +2,13 @@ import os
 import shutil
 from data_validation import validate_character_folders  # Import the function from data_validation.py
 
+# Prompt the user to indicate if this is a test run
+is_test = input("Is this a test run? (y/n): ").strip().lower() == 'y'
+
 # First, perform data validation
 src_dir = '/workspace/characters_raw'
 dest_dir = '/workspace/characters_prep'
-validation_result = validate_character_folders(src_dir)
+validation_result = validate_character_folders(is_test, src_dir)
 
 if validation_result == 0:
     print("Data validation did not pass. Exiting.")

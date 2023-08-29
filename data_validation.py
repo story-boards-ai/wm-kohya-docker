@@ -22,7 +22,13 @@ def check_folder_validity(folder_path):
 
     return True, ""
 
-def validate_character_folders(training_data_path):
+def validate_character_folders(test, src_dir=None):
+    print("----  data validation  ----")
+    if test:
+        training_data_path = input("Please enter the path to training_data: ").strip()
+    else:
+        training_data_path = src_dir
+
     try:
         character_folders = [f for f in os.listdir(training_data_path) if os.path.isdir(os.path.join(training_data_path, f)) and re.match(r"\d", f)]
         character_folders.sort(key=extract_numeric_prefix_with_suffix)
@@ -54,6 +60,7 @@ def validate_character_folders(training_data_path):
 
     
 if __name__ == '__main__':
-    training_data_path = input("Please enter the path to training_data: ").strip()
-    exit_code = validate_character_folders(training_data_path)
+    test_mode = True  # Or False, depending on what you want when running this script standalone
+    training_data_path = None  # This will get filled in if test_mode is False
+    exit_code = validate_character_folders(test_mode, training_data_path)
     exit(exit_code)
