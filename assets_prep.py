@@ -1,9 +1,27 @@
 import os
 import shutil
 from data_validation import validate_character_folders  # Import the function from data_validation.py
+import threading
 
-# Prompt the user to indicate if this is a test run
-is_test = input("Is this a test run? (y/n): ").strip().lower() == 'y'
+def get_user_input(prompt, output_list):
+    output_list[0] = input(prompt).strip().lower()
+
+# Create a list to store user input
+user_input = [None]
+
+# Create a thread to get user input
+input_thread = threading.Thread(target=get_user_input, args=("Is this a test run? (yes/no): ", user_input))
+input_thread.start()
+
+# Wait for 5 seconds for user input
+input_thread.join(timeout=5)
+
+# Check if user input was received
+if user_input[0] is None:
+    print("Timed out waiting for user input. Setting is_test to False.")
+    is_test = False
+else:
+    is_test = user_input[0] == 'yes'
 
 # First, perform data validation
 src_dir = '/workspace/characters_raw'
@@ -13,7 +31,7 @@ validation_result = validate_character_folders(is_test, src_dir)
 if validation_result == 0:
     print("Data validation did not pass. Exiting.")
     exit(0)  # Stop the program
-
+    
 def create_workspace_img_folders_and_copy_files():
     try:
         # List character folders in /characters
