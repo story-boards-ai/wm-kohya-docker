@@ -1,3 +1,4 @@
+from collections import defaultdict, OrderedDict
 import os
 import re
 
@@ -41,6 +42,38 @@ def validate_character_folders(test, src_dir=None):
 
     print(f"Found {len(character_folders)} character folders in '{training_data_path}'.")
 
+    # Initialize stats dictionary
+    stats = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+
+    for char_folder in character_folders:
+        # Extract information from folder name: INDEX_ETHNICITY_AGE_SEX
+        try:
+            index, ethnicity, age, sex = char_folder.split('_')
+        except ValueError:
+            print(f"Skipping invalid folder name: {char_folder}")
+            continue
+
+        age_group = f"{int(age)//10 * 10}'s"
+        sex_initial = sex[0].lower()  # 'm' for 'male', 'f' for 'female'
+        stats[ethnicity][age_group][sex_initial] += 1
+
+
+    # Calculate and display stats with percentages
+    with open("character_stats.txt", "w") as stats_file:
+        for ethnicity, age_groups in stats.items():
+            sorted_age_groups = OrderedDict(sorted(age_groups.items(), key=lambda x: int(x[0].split("'")[0])))
+            print(f"\n{ethnicity} (m/f):")
+            stats_file.write(f"{ethnicity} (m/f):\n")
+            for age_group, sex_count in sorted_age_groups.items():
+                total = sum(sex_count.values())
+                male = sex_count.get('m', 0)
+                female = sex_count.get('f', 0)
+                male_percent = round((male / total) * 100) if total > 0 else 0
+                female_percent = round((female / total) * 100) if total > 0 else 0
+                print(f"  {age_group}:  {total},  {male_percent}/{female_percent}")
+                stats_file.write(f"  {age_group}:  {total},  {male_percent}/{female_percent}\n")
+
+
     invalid_folders = []
     for char_folder in character_folders:
         is_valid, error_message = check_folder_validity(os.path.join(training_data_path, char_folder))
@@ -58,7 +91,6 @@ def validate_character_folders(test, src_dir=None):
         print("All character folders are valid.")
         return 0
 
-    
 if __name__ == '__main__':
     test_mode = True  # Or False, depending on what you want when running this script standalone
     training_data_path = None  # This will get filled in if test_mode is False
