@@ -18,7 +18,7 @@ input_thread.join(timeout=5)
 
 # Check if user input was received
 if user_input[0] is None:
-    print("Timed out waiting for user input. Setting is_test to False.")
+    print("Timed out waiting for user input. Running hot.")
     is_test = False
 else:
     is_test = user_input[0] == 'yes'
@@ -31,7 +31,7 @@ validation_result = validate_character_folders(is_test, src_dir)
 if validation_result == 0:
     print("Data validation did not pass. Exiting.")
     exit(0)  # Stop the program
-    
+
 def create_workspace_img_folders_and_copy_files():
     try:
         # List character folders in /characters
