@@ -1,0 +1,34 @@
+1_european_20_female: The character base folder contains files: lora_settings.json.
+22_black_35_male: The 'img' folder in the character doesn't contain any files.
+25_south_american_25_female: The character base folder contains files: TI_settings.json.
+29_european_10_female: The 'img' folder in the character doesn't contain any files.
+30_black_65_male: The 'img' folder in the character doesn't contain any files.
+31_european_16_female: The 'img' folder in the character doesn't contain any files.
+35_black_25_male: The 'img' folder in the character doesn't contain any files.
+36_european_25_female: The 'img' folder in the character doesn't contain any files.
+37_european_30_female: The 'img' folder in the character doesn't contain any files.
+38_european_70_female: The 'img' folder in the character doesn't contain any files.
+39_black_30_male: The 'img' folder in the character doesn't contain any files.
+40_black_40_male: The 'img' folder in the character doesn't contain any files.
+41a_black_28_female: The 'img' folder in the character doesn't contain any files.
+50_south_american_55_male: The 'img' folder in the character doesn't contain any files.
+51_european_60_female: The 'img' folder in the character doesn't contain any files.
+51a_asian_60_female: The 'img' folder in the character doesn't contain any files.
+52_south_american_60_male: The 'img' folder in the character doesn't contain any files.
+55a_asian_16_female: The 'img' folder in the character doesn't contain any files.
+58_european_16_female: The 'img' folder in the character doesn't contain any files.
+59_european_30_female: The 'img' folder in the character doesn't contain any files.
+60_south_american_30_male: The 'img' folder in the character doesn't contain any files.
+70_middle_eastern_50_male: The 'img' folder in the character doesn't contain any files.
+75_middle_eastern_65_male: The 'img' folder in the character doesn't contain any files.
+87_south_american_70_female: The 'img' folder in the character doesn't contain any files.
+88_asian_20_male: The 'img' folder in the character doesn't contain any files.
+89_asian_35_male: The 'img' folder in the character doesn't contain any files.
+93_asian_60_male: The 'img' folder in the character doesn't contain any files.
+99_asian_25_male: The 'img' folder in the character doesn't contain any files.
+101_asian_40_male: The 'img' folder in the character doesn't contain any files.
+102_asian_45_male: The 'img' folder in the character doesn't contain any files.
+110_middle_eastern_60_female: The character base folder contains files: image_3_0.png.
+120_indian_28_male: The 'img' folder in the character doesn't contain any files.
+122_indian_30_male: The 'img' folder in the character doesn't contain any files.
+123_indian_30_female: The 'img' folder in the character doesn't contain any files.

@@ -22,18 +22,16 @@ def check_folder_validity(folder_path):
 
     return True, ""
 
-def validate_character_folders():
-    training_data_path = input("Please enter the path to training_data: ").strip()
-
+def validate_character_folders(training_data_path):
     try:
         character_folders = [f for f in os.listdir(training_data_path) if os.path.isdir(os.path.join(training_data_path, f)) and re.match(r"\d", f)]
         character_folders.sort(key=extract_numeric_prefix_with_suffix)
     except FileNotFoundError:
         print(f"Error: Training data directory '{training_data_path}' not found.")
-        return
+        return 1
     except Exception as e:
         print(f"Error while listing character folders: {e}")
-        return
+        return 1
 
     print(f"Found {len(character_folders)} character folders in '{training_data_path}'.")
 
@@ -42,12 +40,20 @@ def validate_character_folders():
         is_valid, error_message = check_folder_validity(os.path.join(training_data_path, char_folder))
         if not is_valid:
             invalid_folders.append((char_folder, error_message))
-    
+
     if invalid_folders:
         print("Found the following issues with character folders:")
-        for folder_name, error_message in invalid_folders:
-            print(f"- {folder_name}: {error_message}")
+        with open("invalid_folders.txt", "w") as file:
+            for folder_name, error_message in invalid_folders:
+                print(f"- {folder_name}: {error_message}")
+                file.write(f"{folder_name}: {error_message}\n")
+        return 1
     else:
         print("All character folders are valid.")
+        return 0
 
-validate_character_folders()
+    
+if __name__ == '__main__':
+    training_data_path = input("Please enter the path to training_data: ").strip()
+    exit_code = validate_character_folders(training_data_path)
+    exit(exit_code)
