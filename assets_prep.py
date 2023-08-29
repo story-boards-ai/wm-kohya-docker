@@ -1,35 +1,17 @@
 import os
 import shutil
+from data_validation import validate_character_folders  # Import the function from data_validation.py
 
-def check_folder_validity(folder_path):
-    """
-    Check the validity of a character folder:
-    - Must contain an img subfolder.
-    - The img folder must contain files.
-    - The parent folder of img should not contain files.
-    """
-    img_folder_path = os.path.join(folder_path, 'img')
-    
-    # Check if the img folder exists
-    if not os.path.exists(img_folder_path):
-        return False, f"The folder '{folder_path}' doesn't contain an 'img' subfolder."
-    
-    # Check if the img folder has files
-    if not any(os.scandir(img_folder_path)):
-        return False, f"The 'img' folder in '{folder_path}' doesn't contain any files."
-    
-    # Check if the parent folder of img contains files (excluding the 'img' folder itself)
-    parent_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and f != 'img']
-    if parent_files:
-        return False, f"The parent folder of 'img' in '{folder_path}' contains files: {', '.join(parent_files)}."
+# First, perform data validation
+src_dir = '/workspace/characters_raw'
+dest_dir = '/workspace/characters_prep'
+validation_result = validate_character_folders(src_dir)
 
-    return True, ""
+if validation_result == 0:
+    print("Data validation did not pass. Exiting.")
+    exit(0)  # Stop the program
 
 def create_workspace_img_folders_and_copy_files():
-    # Base directories
-    src_dir = '/workspace/characters_raw'
-    dest_dir = '/workspace/characters_prep'
-
     try:
         # List character folders in /characters
         character_folders = [f for f in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, f))]
@@ -41,20 +23,6 @@ def create_workspace_img_folders_and_copy_files():
         return
 
     print(f"Found {len(character_folders)} character folders in '{src_dir}'.")
-
-    # Check the validity of each folder
-    invalid_folders = []
-    for char_folder in character_folders:
-        is_valid, error_message = check_folder_validity(os.path.join(src_dir, char_folder))
-        if not is_valid:
-            invalid_folders.append((char_folder, error_message))
-    
-    # If there are any invalid folders, report and exit
-    if invalid_folders:
-        print("Found the following issues with character folders:")
-        for folder_name, error_message in invalid_folders:
-            print(f"- {folder_name}: {error_message}")
-        return
 
     for char_folder in character_folders:
         # Path to the img folder in the source directory
@@ -71,7 +39,6 @@ def create_workspace_img_folders_and_copy_files():
             continue
 
         num_png_files = len(png_files)
-
         print(f"Found {num_png_files} PNG files in '{img_src_folder}'.")
 
         # Calculate the prefix for the new folder name
@@ -116,7 +83,6 @@ def create_workspace_img_folders_and_copy_files():
             src_file_path = os.path.join(img_src_folder, png_file)
             dest_file_path = os.path.join(img_dest_folder, png_file)
 
-            # Check if the file already exists in the destination; if not, copy it
             try:
                 if not os.path.exists(dest_file_path):
                     shutil.copy2(src_file_path, dest_file_path)
