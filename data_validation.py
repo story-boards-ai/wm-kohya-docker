@@ -47,12 +47,17 @@ def validate_character_folders(test, src_dir=None):
 
     for char_folder in character_folders:
         # Extract information from folder name: INDEX_ETHNICITY_AGE_SEX
-        try:
-            index, ethnicity, age, sex = char_folder.split('_')
-        except ValueError:
-            print(f"Skipping invalid folder name: {char_folder}")
-            continue
+        folder_parts = char_folder.split('_')
 
+        # Extract age and sex using negative indexing
+        age = folder_parts[-2]
+        sex = folder_parts[-1]
+
+        # The remaining parts make up the index and ethnicity
+        index = folder_parts[0]
+        ethnicity = '_'.join(folder_parts[1:-2])
+
+        # Continue with the rest of your code...
         age_group = f"{int(age)//10 * 10}'s"
         sex_initial = sex[0].lower()  # 'm' for 'male', 'f' for 'female'
         stats[ethnicity][age_group][sex_initial] += 1
@@ -61,9 +66,13 @@ def validate_character_folders(test, src_dir=None):
     # Calculate and display stats with percentages
     with open("character_stats.txt", "w") as stats_file:
         for ethnicity, age_groups in stats.items():
+            # Calculate the total for this ethnicity
+            ethnicity_total = sum([sum(sex_count.values()) for sex_count in age_groups.values()])
+            
+            print(f"\n{ethnicity} (total: {ethnicity_total}) (m/f):")
+            stats_file.write(f"{ethnicity} (total: {ethnicity_total}) (m/f):\n")
+            
             sorted_age_groups = OrderedDict(sorted(age_groups.items(), key=lambda x: int(x[0].split("'")[0])))
-            print(f"\n{ethnicity} (m/f):")
-            stats_file.write(f"{ethnicity} (m/f):\n")
             for age_group, sex_count in sorted_age_groups.items():
                 total = sum(sex_count.values())
                 male = sex_count.get('m', 0)
@@ -72,7 +81,6 @@ def validate_character_folders(test, src_dir=None):
                 female_percent = round((female / total) * 100) if total > 0 else 0
                 print(f"  {age_group}:  {total},  {male_percent}/{female_percent}")
                 stats_file.write(f"  {age_group}:  {total},  {male_percent}/{female_percent}\n")
-
 
     invalid_folders = []
     for char_folder in character_folders:
