@@ -106,6 +106,7 @@ COPY nginx/template-readme.md /usr/share/nginx/html/README.md
 # Copy cutom scripts
 COPY train.py /
 COPY assets_prep.py /
+COPY data_validation.py /
 
 # Set up the container startup script
 WORKDIR /
