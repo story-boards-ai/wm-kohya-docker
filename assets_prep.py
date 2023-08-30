@@ -24,7 +24,7 @@ else:
     is_test = user_input[0] == 'yes'
 
 # First, perform data validation
-src_dir = '/workspace/characters_raw'
+src_dir = '/characters_raw'
 dest_dir = '/workspace/characters_prep'
 validation_result = validate_character_folders(is_test, src_dir)
 
