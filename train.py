@@ -95,13 +95,16 @@ def start_training_sessions():
             continue
         else:
             # Execute the command
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = process.communicate()
+            print(f"---- training  '{char_folder}' ----")
+            print(f"")
+            process = subprocess.Popen(cmd)
+            process.wait()
 
             if process.returncode != 0:
-                print(f"Error occurred while processing '{char_folder}': {err.decode('utf-8')}")
+                print(f"Error occurred while processing '{char_folder}'.")
             else:
                 print(f"Processed '{char_folder}' successfully.")
+
 
 if __name__ == '__main__':
     start_training_sessions()
