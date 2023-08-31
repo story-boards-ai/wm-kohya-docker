@@ -8,6 +8,10 @@ echo "Syncing Kohya_ss to workspace, please wait..."
 rsync -au /kohya_ss/ /workspace/kohya_ss/
 rm -rf /kohya_ss
 
+# move custome scripts to kohya_ss folder
+echo "Moving custom scripts to kohya_ss folder"
+rsync -au /assets_prep.py /data_validation.py /train.py /workspace/kohya_ss/
+
 # Fix the venv to make it work from /workspace
 echo "Fixing venv..."
 /fix_venv.sh /kohya_ss/venv /workspace/kohya_ss/venv

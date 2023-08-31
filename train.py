@@ -92,7 +92,7 @@ def start_training_sessions():
         print("Executing command:", " ".join(cmd))
         
         if is_test == 'y':
-            break
+            continue
         else:
             # Execute the command
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
