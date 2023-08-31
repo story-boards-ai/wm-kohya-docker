@@ -38,8 +38,10 @@ RUN apt update && \
         wget \
         curl \
         psmisc \
+        nano \
         rsync \
         vim \
+        fish \
         zip \
         unzip \
         p7zip-full \

@@ -10,17 +10,25 @@ def extract_numeric_prefix_with_suffix(s):
     return (num_part, suffix_part)
 
 def start_training_sessions():
+    print("Function start_training_sessions() is being executed.")  # Debugging line
+    
     is_test = input("Is this a test? (y/n): ").lower().strip()
+    print(f"Is this a test?: {is_test}")  # Debugging line
+    
     if is_test == 'y':
         base_dir = input("Please enter the path for base_dir: ").strip()
     else:
         base_dir = '/workspace/characters_prep'
 
-     # Ask if the user wants to train a series or a single character
+    print(f"Base Directory: {base_dir}")  # Debugging line
+    
     train_type = input("Do you want to train a series or a single character? (series/single): ").lower().strip()
-
-    # Ask for the starting character number
-    start_char_num = int(input("Enter the starting character number: "))    
+    print(f"Training Type: {train_type}")  # Debugging line
+    
+    start_char_num = int(input("Enter the starting character number: "))
+    print(f"Starting Character Number: {start_char_num}")  # Debugging line
+    
+    print("Building base cmd")  # Debugging line
     
     # Base command
     cmd_base = [
@@ -51,25 +59,34 @@ def start_training_sessions():
         '--num_vectors_per_token=8',
         '--use_object_template'
     ]
-
+    
+    print("Attempting to list all folders...")  # Debugging line
+    
     try:
         all_folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+        print(f"All Folders: {all_folders}")  # Debugging line
+        
         character_folders = [f for f in all_folders if is_valid_folder(f)]
         character_folders.sort(key=extract_numeric_prefix_with_suffix)
-    except FileNotFoundError:
-        print(f"Error: Base directory '{base_dir}' not found.")
+    except Exception as e:
+        print(f"An exception occurred: {e}")  # Debugging line
         return
-
-    # Filter out the characters that need to be trained based on user input
+    
     if train_type == "single":
         character_folders = [f for f in character_folders if extract_numeric_prefix_with_suffix(f)[0] == start_char_num]
     else:  # series
         character_folders = [f for f in character_folders if extract_numeric_prefix_with_suffix(f)[0] >= start_char_num]
 
+    print(f"Characters to be trained: {character_folders}")  # Debugging line
+    
     for char_folder in character_folders:
+        print(f"Processing folder: {char_folder}")  # Debugging line
+
+        print(f"starting with: '{char_folder}'")
         char_path = os.path.join(base_dir, char_folder, 'img')
         model_path = os.path.join(base_dir, char_folder, 'model')
         log_path = os.path.join(base_dir, char_folder, 'log')
+        print("paths set")
 
         if "female" in char_folder:
             init_word = "woman"
@@ -89,14 +106,12 @@ def start_training_sessions():
         ]
 
            # Print the command for visibility
-        print("Executing command:", " ".join(cmd))
+        print("Executing command:", " ".join(cmd))  # Debugging line
         
         if is_test == 'y':
             continue
         else:
-            # Execute the command
-            print(f"---- training  '{char_folder}' ----")
-            print(f"")
+            print(f"---- Training '{char_folder}' ----")  # Debugging line
             process = subprocess.Popen(cmd)
             process.wait()
 
@@ -104,7 +119,6 @@ def start_training_sessions():
                 print(f"Error occurred while processing '{char_folder}'.")
             else:
                 print(f"Processed '{char_folder}' successfully.")
-
 
 if __name__ == '__main__':
     start_training_sessions()
