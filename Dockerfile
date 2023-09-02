@@ -110,6 +110,7 @@ COPY train.py /
 COPY assets_prep.py /
 COPY data_validation.py /
 COPY train.sh /
+COPY zipandsend.py /
 
 # Set up the container startup script
 WORKDIR /
