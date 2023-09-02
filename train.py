@@ -1,6 +1,12 @@
 import os
 import subprocess
 
+def check_virtual_environment():
+    if "VIRTUAL_ENV" in os.environ:
+        print(f"Virtual environment is activated: {os.environ['VIRTUAL_ENV']}")
+    else:
+        print("Warning: Virtual environment is not activated. It is recommended to activate it.")
+
 def is_valid_folder(name):
     return name[0].isdigit()
 
@@ -121,4 +127,5 @@ def start_training_sessions():
                 print(f"Processed '{char_folder}' successfully.")
 
 if __name__ == '__main__':
+    check_virtual_environment()
     start_training_sessions()
