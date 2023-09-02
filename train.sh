@@ -2,7 +2,7 @@
 
 # Function to activate virtual environment
 check_virtual_environment() {
-    venv_path="/path/to/your/venv"  # Replace with the actual path to your virtual environment
+    venv_path="venv"  # Replace with the actual path to your virtual environment
 
     if [ -n "$VIRTUAL_ENV" ]; then
         echo "Virtual environment is already activated: $VIRTUAL_ENV"
@@ -25,8 +25,13 @@ is_valid_folder() {
 
 # Function to extract numeric and suffix parts
 extract_numeric_prefix_with_suffix() {
-    num_part=$(echo $1 | grep -o -E '[0-9]+')
-    if [[ $1 == *"a"* ]]; then
+    # Extract the numeric part from the beginning of the folder name
+    num_part=$(echo "$1" | grep -o -E '^[0-9]+')
+    
+    # Check for the 'a' suffix following the numeric part
+    suffix_part=$(echo "$1" | grep -o -E '^[0-9]+[a]?[a]' | grep -o -E 'a')
+    
+    if [[ -n "$suffix_part" ]]; then
         suffix_part=1
     else
         suffix_part=0
@@ -96,6 +101,17 @@ start_training_sessions() {
     filtered_character_folders=()
     for f in "${character_folders[@]}"; do
         extract_numeric_prefix_with_suffix "$f"
+
+        if [ -z "$num_part" ] || [ -z "$start_char_num" ]; then
+            echo "Either num_part or start_char_num is not set. Skipping."
+            continue
+        fi
+
+        if ! [[ "$num_part" =~ ^[0-9]+$ ]] || ! [[ "$start_char_num" =~ ^[0-9]+$ ]]; then
+            echo "Either num_part or start_char_num is not an integer. Skipping."
+            continue
+        fi
+
         if [ "$train_type" = "single" ]; then
             if [ "$num_part" -eq "$start_char_num" ]; then
                 filtered_character_folders+=("$f")
@@ -106,6 +122,7 @@ start_training_sessions() {
             fi
         fi
     done
+
 
     for char_folder in "${filtered_character_folders[@]}"; do
         char_path="$base_dir/$char_folder/img"

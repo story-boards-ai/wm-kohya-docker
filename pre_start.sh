@@ -10,7 +10,7 @@ rm -rf /kohya_ss
 
 # move custome scripts to kohya_ss folder
 echo "Moving custom scripts to kohya_ss folder"
-rsync -au /assets_prep.py /data_validation.py /train.py /workspace/kohya_ss/
+rsync -au /assets_prep.py /data_validation.py /train.py /train.sh /workspace/kohya_ss/
 
 # Fix the venv to make it work from /workspace
 echo "Fixing venv..."
