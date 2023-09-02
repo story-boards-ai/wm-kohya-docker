@@ -100,6 +100,8 @@ def create_workspace_img_folders_and_copy_files():
                 continue
 
         # Copy the PNG files from the source img folder to the new destination img folder
+        copied_files = 0
+        skipped_files = 0
         for png_file in png_files:
             src_file_path = os.path.join(img_src_folder, png_file)
             dest_file_path = os.path.join(img_dest_folder, png_file)
@@ -107,12 +109,15 @@ def create_workspace_img_folders_and_copy_files():
             try:
                 if not os.path.exists(dest_file_path):
                     shutil.copy2(src_file_path, dest_file_path)
-                    print(f"Copied '{png_file}' from '{src_file_path}' to '{dest_file_path}'.")
+                    copied_files = copied_files + 1
                 else:
                     print(f"File '{png_file}' already exists in '{dest_file_path}'. Not copying.")
+                    skipped_files = skipped_files + 1
             except Exception as e:
                 print(f"Error while copying '{png_file}' from '{src_file_path}' to '{dest_file_path}': {e}")
                 continue
+        print(f"Copied '{copied_files}' new files. Skipped '{skipped_files}'")
+
 
 # Run the function
 create_workspace_img_folders_and_copy_files()
