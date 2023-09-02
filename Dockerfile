@@ -109,6 +109,7 @@ COPY nginx/template-readme.md /usr/share/nginx/html/README.md
 COPY train.py /
 COPY assets_prep.py /
 COPY data_validation.py /
+COPY train.sh /
 
 # Set up the container startup script
 WORKDIR /
