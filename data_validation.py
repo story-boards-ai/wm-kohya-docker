@@ -19,7 +19,7 @@ def check_folder_validity(folder_path):
     
     parent_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and f != '.DS_Store']
     if parent_files:
-        return False, f"The character base folder contains files: {', '.join(parent_files)}."
+        return False, f"The character base folder contains files."
 
     return True, ""
 
