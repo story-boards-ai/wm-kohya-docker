@@ -76,7 +76,7 @@ execute_script "/post_start.sh" "Running post-start script..."
 echo "Container is READY!"
 
 # Execute assets_prep.py script
-#echo "Executing assets_prep.py..."
-#python3 /workspace/kohya_ss/assets_prep.py  
+echo "Executing assets_prep.py..."
+python3 /workspace/kohya_ss/assets_prep.py  
 
 sleep infinity
