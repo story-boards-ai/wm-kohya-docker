@@ -95,7 +95,8 @@ start_training_sessions() {
     done
 
     # Sort character_folders if needed (this is a simple lexicographic sort)
-    # character_folders=($(for i in "${character_folders[@]}"; do echo $i; done | sort))
+    character_folders=($(for i in "${character_folders[@]}"; do echo $i; done | sort))
+
 
     # Apply filters based on user input
     filtered_character_folders=()
