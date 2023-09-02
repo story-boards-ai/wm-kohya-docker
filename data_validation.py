@@ -35,10 +35,10 @@ def validate_character_folders(test, src_dir=None):
         character_folders.sort(key=extract_numeric_prefix_with_suffix)
     except FileNotFoundError:
         print(f"Error: Training data directory '{training_data_path}' not found.")
-        return 1
+        return 0
     except Exception as e:
         print(f"Error while listing character folders: {e}")
-        return 1
+        return 0
 
     print(f"Found {len(character_folders)} character folders in '{training_data_path}'.")
 
@@ -94,10 +94,10 @@ def validate_character_folders(test, src_dir=None):
             for folder_name, error_message in invalid_folders:
                 print(f"- {folder_name}: {error_message}")
                 file.write(f"{folder_name}: {error_message}\n")
-        return 1
+        return 0
     else:
         print("All character folders are valid.")
-        return 0
+        return 1
 
 if __name__ == '__main__':
     test_mode = True  # Or False, depending on what you want when running this script standalone
