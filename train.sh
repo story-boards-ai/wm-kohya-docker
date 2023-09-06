@@ -23,6 +23,25 @@ is_valid_folder() {
     [[ $1 =~ ^[0-9] ]]
 }
 
+# Function to check if "trained" file exists in a folder
+is_character_trained() {
+    local folder="$1"
+    local trained_file="$folder/trained"
+    
+    if [ -f "$trained_file" ]; then
+        echo "Character '$folder' was previously trained."
+        return 0  # Character is trained
+    else
+        return 1  # Character is not trained
+    fi
+}
+
+# Function to mark a character as trained
+mark_character_as_trained() {
+    local folder="$1"
+    touch "$folder/trained"
+}
+
 # Function to extract numeric and suffix parts
 extract_numeric_prefix_with_suffix() {
     # Extract the numeric part from the beginning of the folder name
@@ -126,6 +145,10 @@ start_training_sessions() {
 
 
     for char_folder in "${filtered_character_folders[@]}"; do
+        if is_character_trained "$char_folder"; then
+            continue  # Character is already trained, skip
+        fi
+
         char_path="$base_dir/$char_folder/img"
         model_path="$base_dir/$char_folder/model"
         log_path="$base_dir/$char_folder/log"
@@ -154,6 +177,7 @@ start_training_sessions() {
                 echo "Error occurred while processing '$char_folder'."
             else
                 echo "Processed '$char_folder' successfully."
+                mark_character_as_trained "$char_folder"
             fi
         fi
     done
