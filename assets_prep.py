@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 from data_validation import validate_character_folders  # Import the function from data_validation.py
 import threading
@@ -36,10 +37,10 @@ try:
     character_folders = [f for f in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, f))]
 except FileNotFoundError:
     print(f"Error: Source directory '{src_dir}' not found.")
-    return
+    sys.exit(1)
 except Exception as e:
     print(f"Error while listing character folders: {e}")
-    return
+    sys.exit(1)
 
 print(f"Found {len(character_folders)} character folders in '{src_dir}'.")
 
