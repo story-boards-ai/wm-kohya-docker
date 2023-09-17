@@ -5,7 +5,7 @@ ARG KOHYA_VERSION=v21.8.8
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=Africa/Johannesburg \
+    TZ=Europe/Zurich \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=on \
     SHELL=/bin/bash
@@ -35,6 +35,7 @@ RUN apt update && \
         libxrender1 \
         libxext6 \
         ffmpeg \
+        glances \
         wget \
         curl \
         psmisc \
