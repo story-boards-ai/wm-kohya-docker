@@ -5,7 +5,11 @@ from data_validation import validate_character_folders  # Import the function fr
 import threading
 
 def get_user_input(prompt, output_list):
-    output_list[0] = input(prompt).strip().lower()
+    try:
+        output_list[0] = input(prompt).strip().lower()
+    except EOFError:
+        print("EOF encountered when reading input. Assigning default value.")
+        output_list[0] = 'no'  # or any other default value
 
 # Create a list to store user input
 user_input = [None]
