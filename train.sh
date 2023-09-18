@@ -94,7 +94,6 @@ start_training_sessions() {
         "--optimizer_type=AdamW8bit"
         "--bucket_reso_steps=64"
         "--save_every_n_steps=50"
-        "--save_state"
         "--mem_eff_attn"
         "--xformers"
         "--bucket_no_upscale"
