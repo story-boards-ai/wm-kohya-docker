@@ -2,6 +2,9 @@ import os
 import shutil
 import subprocess
 
+rsync -av --exclude='img' /workspace/characters_prep/ /workspace/output/ # use this instead!
+
+
 def main():
     # Source directory containing character folders
     source_directory = "/workspace/characters_prep/"
