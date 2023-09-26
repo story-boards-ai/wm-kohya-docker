@@ -97,6 +97,7 @@ start_training_sessions() {
         "--mem_eff_attn"
         "--xformers"
         "--bucket_no_upscale"
+        "--network_dim=16"
         "--noise_offset=0.0"
         "--num_vectors_per_token=8"
         "--use_object_template")
