@@ -68,11 +68,18 @@ start_training_sessions() {
         base_dir="/workspace/characters_prep"
     fi
 
-    echo "Do you want to train a series or a single character? (series/single): "
+    echo "Do you want to train a series [1], a single [2] or specific characters [3]?"
     read train_type
 
-    echo "Enter the starting character number: "
-    read start_char_num
+    if [ "$train_type" = "3" ]; then
+        echo "Enter character IDs separated by spaces (e.g. '23 27 55 104'):"
+        read -a specific_char_ids
+    fi
+
+    if [ "$train_type" = "1" ] || [ "$train_type" = "2" ]; then
+        echo "Enter the starting character number: "
+        read start_char_num
+    fi
 
     # Base command
     cmd_base=("accelerate" "launch"
@@ -122,26 +129,31 @@ start_training_sessions() {
     for f in "${character_folders[@]}"; do
         extract_numeric_prefix_with_suffix "$f"
 
-        if [ -z "$num_part" ] || [ -z "$start_char_num" ]; then
-            echo "Either num_part or start_char_num is not set. Skipping."
-            continue
-        fi
-
-        if ! [[ "$num_part" =~ ^[0-9]+$ ]] || ! [[ "$start_char_num" =~ ^[0-9]+$ ]]; then
-            echo "Either num_part or start_char_num is not an integer. Skipping."
-            continue
-        fi
-
-        if [ "$train_type" = "single" ]; then
-            if [ "$num_part" -eq "$start_char_num" ]; then
-                filtered_character_folders+=("$f")
-            fi
-        else
-            if [ "$num_part" -ge "$start_char_num" ]; then
-                filtered_character_folders+=("$f")
-            fi
-        fi
+        case "$train_type" in
+            1)
+                # For series
+                if [[ "$num_part" -ge "$start_char_num" ]]; then
+                    filtered_character_folders+=("$f")
+                fi
+                ;;
+            2)
+                # For single
+                if [[ "$num_part" -eq "$start_char_num" ]]; then
+                    filtered_character_folders+=("$f")
+                fi
+                ;;
+            3)
+                # For specific characters
+                for id in "${specific_char_ids[@]}"; do
+                    if [[ "$num_part" -eq "$id" ]]; then
+                        filtered_character_folders+=("$f")
+                        break
+                    fi
+                done
+                ;;
+        esac
     done
+
 
 
     for char_folder in "${filtered_character_folders[@]}"; do
