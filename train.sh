@@ -104,7 +104,6 @@ start_training_sessions() {
         "--mem_eff_attn"
         "--xformers"
         "--bucket_no_upscale"
-        "--network_dim=16"
         "--noise_offset=0.0"
         "--num_vectors_per_token=8"
         "--use_object_template")
@@ -132,20 +131,20 @@ start_training_sessions() {
         case "$train_type" in
             1)
                 # For series
-                if [[ "$num_part" -ge "$start_char_num" ]]; then
+                if [[ "10#$num_part" -ge "10#$start_char_num" ]]; then
                     filtered_character_folders+=("$f")
                 fi
                 ;;
             2)
                 # For single
-                if [[ "$num_part" -eq "$start_char_num" ]]; then
+                if [[ "10#$num_part" -eq "10#$start_char_num" ]]; then
                     filtered_character_folders+=("$f")
                 fi
                 ;;
             3)
                 # For specific characters
                 for id in "${specific_char_ids[@]}"; do
-                    if [[ "$num_part" -eq "$id" ]]; then
+                    if [[ "10#$num_part" -eq "10#$id" ]]; then
                         filtered_character_folders+=("$f")
                         break
                     fi
