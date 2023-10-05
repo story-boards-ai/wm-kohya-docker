@@ -45,6 +45,7 @@ RUN apt update && \
         fish \
         zip \
         unzip \
+        mc \
         p7zip-full \
         htop \
         pkg-config \
