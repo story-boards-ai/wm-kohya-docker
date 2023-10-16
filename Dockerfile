@@ -90,13 +90,6 @@ RUN wget -O /kohya_ss/model/sd_xl_base_1.0.safetensors https://huggingface.co/st
 # Copy local training data to the container
 COPY training_data/ /characters_raw
 
-# Install Jupyter
-RUN pip3 install -U --no-cache-dir jupyterlab \
-        jupyterlab_widgets \
-        ipykernel \
-        ipywidgets \
-        gdown
-
 # Install runpodctl
 RUN wget https://github.com/runpod/runpodctl/releases/download/v1.10.0/runpodctl-linux-amd -O runpodctl && \
     chmod a+x runpodctl && \
