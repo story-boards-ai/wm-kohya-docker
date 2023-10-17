@@ -109,15 +109,35 @@ for char_folder in character_folders:
         src_file_path = os.path.join(img_src_folder, png_file)
         dest_file_path = os.path.join(img_dest_folder, png_file)
 
+        # Derive the .txt file names from the .png file names
+        txt_file = png_file.replace('.png', '.txt')
+        src_txt_file_path = os.path.join(img_src_folder, txt_file)
+        dest_txt_file_path = os.path.join(img_dest_folder, txt_file)
+
         try:
+            # Copy PNG file if it doesn't exist in the destination folder
             if not os.path.exists(dest_file_path):
                 shutil.copy2(src_file_path, dest_file_path)
-                copied_files = copied_files + 1
+                copied_files += 1
             else:
                 print(f"File '{png_file}' already exists in '{dest_file_path}'. Not copying.")
-                skipped_files = skipped_files + 1
+                skipped_files += 1
+
+            # Check if corresponding TXT file exists in the source, and copy it if it does
+            if os.path.exists(src_txt_file_path):
+                if not os.path.exists(dest_txt_file_path):
+                    shutil.copy2(src_txt_file_path, dest_txt_file_path)
+                    copied_files += 1  # Counting txt files as well in the copied files
+                else:
+                    print(f"File '{txt_file}' already exists in '{dest_txt_file_path}'. Not copying.")
+                    skipped_files += 1
+            else:
+                print(f"Corresponding TXT file '{txt_file}' does not exist in '{img_src_folder}'. Skipping...")
+
         except Exception as e:
-            print(f"Error while copying '{png_file}' from '{src_file_path}' to '{dest_file_path}': {e}")
+            print(f"Error while copying '{png_file}' or '{txt_file}' from '{src_file_path}' or '{src_txt_file_path}' to '{dest_file_path}' or '{dest_txt_file_path}': {e}")
             continue
-    print(f"Copied '{copied_files}' new files. Skipped '{skipped_files}'")
+
+    print(f"Copied '{copied_files}' new files. Skipped '{skipped_files}' files.")
+
 
