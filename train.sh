@@ -100,7 +100,7 @@ start_training_sessions() {
         "--mixed_precision=bf16"
         "--caption_extension=.txt" 
         "--save_precision=bf16"
-        "--optimizer_type=AdamW8bit"
+        "--optimizer_type=Adafactor"
         "--bucket_reso_steps=64"
         "--save_every_n_steps=50"
         "--mem_eff_attn"
