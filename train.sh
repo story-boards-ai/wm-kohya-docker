@@ -95,7 +95,7 @@ start_training_sessions() {
         "--learning_rate=0.0035"
         "--lr_scheduler=constant"
         "--train_batch_size=1"
-        "--max_train_steps=2000"
+        "--max_train_steps=1900"
         "--save_every_n_epochs=1"
         "--mixed_precision=bf16"
         "--caption_extension=.txt" 
